@@ -4,5 +4,5 @@ The annotation itself is just metadata on a method, but the plugin you built tur
 
 startConsumers() → scans for @KafkaHandler
 
-KafkaConsumerContainer.start()	    ->        Calls ReflectionUtils.findHandlers(basePackage)
-ReflectionUtils                  ->           Uses Reflections library to find every method with @KafkaHandler inside com.myapp.handlers.
+## KafkaConsumerContainer.start()	    ->        Calls ReflectionUtils.findHandlers(basePackage)
+## ReflectionUtils                  ->           Uses Reflections library to find every method with @KafkaHandler inside com.myapp.handlers.

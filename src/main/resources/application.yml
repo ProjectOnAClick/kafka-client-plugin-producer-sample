@@ -1,0 +1,28 @@
+kafka:
+  bootstrapServers:
+    - kafka1.wbs.com:9092
+  clientId: booking-service
+  producer:
+    acks: all
+    retries: 3
+  consumer:
+    groupId: my-service-group
+    autoOffsetReset: earliest
+    enableAutoCommit: false
+    maxPollRecords: 100
+    concurrency: 2
+  serdes:
+    JSON:
+      serializerClass: com.wbs.kafka.plugin.serdes.JsonSerializer
+      deserializerClass: com.wbs.kafka.plugin.serdes.JsonDeserializer
+    AVRO:
+      serializerClass: com.wbs.kafka.plugin.serdes.AvroSerializer
+      deserializerClass: com.wbs.kafka.plugin.serdes.AvroDeserializer
+    PROTOBUF:
+      serializerClass: com.wbs.kafka.plugin.serdes.ProtoSerializer
+      deserializerClass: com.wbs.kafka.plugin.serdes.ProtoDeserializer
+  retry:
+    maxAttempts: 3
+    backOffMs: 500
+  dlq:
+    suffix: .dlq

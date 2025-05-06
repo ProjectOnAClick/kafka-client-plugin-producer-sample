@@ -1,33 +1,32 @@
 package com.kfaka.example.kafka_demo;
 
 import com.kfaka.example.kafka_demo.pojo.BookingEvent;
+import com.wbs.kafka.plugin.annotation.SerializationFormat;
 import com.wbs.kafka.plugin.client.KafkaPlugin;
 import com.wbs.kafka.plugin.exception.KafkaPluginException;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 @SpringBootApplication
 public class KafkaDemoApplication {
 
-	public static void main(String[] args) throws IOException, KafkaPluginException {
+	public static void main(String[] args) throws IOException, KafkaPluginException, ExecutionException, InterruptedException {
 		SpringApplication.run(KafkaDemoApplication.class, args);
-		KafkaPlugin.initialize("classpath:/application.yml");
+		KafkaPlugin.initialize("/application.yml", SerializationFormat.JSON,SerializationFormat.JSON);
 		KafkaPlugin.startConsumers("com.wbs.kafka.plugin");
 
 		BookingEvent demo = new BookingEvent("id-001", "Alice’s Ride", "STANDARD");
 
-		KafkaPlugin.producer()
+		RecordMetadata meta = KafkaPlugin.producer()
 				.send("BookingRequested", demo.getId(), demo,"JSON")
-				.whenComplete((meta, err) -> {
-					if (err != null) {
-						System.err.println("Publish failed: " + err);
-					} else {
-						System.out.println("Published to "
-								+ meta.topic() + "@" + meta.offset());
-					}
-				});
+				.get();
+
+		System.out.println("Published to "
+				+ meta.topic() + "@" + meta.offset());
 
 	}
 

@@ -1,10 +1,11 @@
 kafka:
   bootstrapServers:
-    - kafka1.wbs.com:9092
+    - localhost:9092
   clientId: booking-service
   producer:
     acks: all
     retries: 3
+    bufferMemory: 16777216
   consumer:
     groupId: my-service-group
     autoOffsetReset: earliest
